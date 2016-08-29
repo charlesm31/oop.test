@@ -4,94 +4,158 @@ spl_autoload_register(function($class_name) {
     include 'classes/' . $class_name . '.php';
 });
 
-$database = new Database;
+$post = new Post();
 
-//  Substitute $_Post to a variable $post
-$post = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+//  Substitute $_Post to a variable $form_action
+$form_action = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-// Add Post on Form Submit
-if (isset($post['submit'])) {
-    $title = $post['title'];
-    $body = $post['body'];
-    $by = 1;
-    
-    $database->query('INSERT INTO posts (post_title, post_body, post_by) VALUES(:title, :body, :by)');
-    $database->bind(':title', $title);
-    $database->bind(':body', $body);
-    $database->bind(':by', $by);    
-    $database->execute();
-    if ($database->lastInsertId()) {
-        $error = 'Post Added.';
+// Add Post
+if (isset($form_action['create'])) {
+    $post->CreatePost($form_action);
+}
+
+// Select Single Post
+if (isset($form_action['select'])) {
+    $selected = $post->singlePost($form_action['id']);
+
+    foreach ($selected as $record) {
+        $id = $record['post_id'];
+        $title = $record['post_title'];
+        $body = $record['post_body'];
     }
 }
 
+// Delete Post
+if (isset($form_action['edit'])) {
+    $post->EditPost($form_action);
+}
 
-// Select all POSTS
-$database->query("SELECT a.*, CONCAT(b.first_name, ' ', b.last_name) as author
-                FROM posts a 
-                LEFT JOIN users b on b.user_id = a.post_by");
-// WHERE a.post_id = :id
-//$database->bind(':id', 1);
+// Delete Post
+if (isset($form_action['delete'])) {
+    $post->DeletePost($form_action['id']);
+}
 
-$posts = $database->resultset();
+$posts = $post->AllPosts();
 ?>
-<link href="../../bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
 
-<div class='container'>
-    <div class='row'>
-        <div class='col-sm-6'>
-            <h1>Add New Post</h1>
+<!doctype html>
 
-            <form class='well' method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                <label>Post Title</label><br>
-                <input type="text" name='title' placeholder="Add title..."><br><br>
-                <label>Post Body</label> <br>
-                <textarea name='body'></textarea><br><br>
-                <input type='submit' name='submit' value='Submit'><br><br>
-            </form>
-        </div>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
 
-        <div class='col-sm-6'>
-            <h1>Edit Post</h1>
+        <title>OOP Migration</title>
+        <meta name="description" content="OOP Migration module">
+        <meta name="author" content="DevJc">
 
-            <form class='well' method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                <label>Post Id</label><br>
-                <input type="text" name='editID' placeholder="Specify ID..."><br><br>
-                <label>Post Title</label><br>
-                <input type="text" name='editTitle' placeholder="Add title..."><br><br>
-                <label>Post Body</label> <br>
-                <textarea name='editBody'></textarea><br><br>
-                <input type='submit' name='edit' value='Edit'><br><br>
-            </form>
-        </div>
-    </div>
+        <!-- Bootstrap -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet" type="text/css"/>        
+        <!-- Font Awesome -->
+        <link href="assets/css/font-awesome.css" rel="stylesheet" type="text/css"/>
+        <!-- Custom Styling -->
+        <link href="assets/css/style.css" rel="stylesheet" type="text/css"/>
 
-    <h1>POST</h1>
-    <table class='table table-bordered table-striped'>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>TITLE</th>
-                <th>BODY</th>
-                <th>Update</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($posts as $post) : ?>
-                <tr>
-                    <td><?php echo $post['post_id']; ?></td>
-                    <td><?php echo $post['post_title']; ?></td>
-                    <td><?php echo $post['post_body']; ?></td>
-                    <td>
-                        <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                            <input type="hidden" name='deleteID' value="<?php echo $post['post_id']; ?>">
-                            <input type='submit' name='delete' value='Delete'>
-                        </form>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+        <!--[if lt IE 9]>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+        <![endif]-->
+    </head>
 
-    <p><?php echo $error; ?></p>
-</div>
+    <body>
+        <div class='container'>
+            <div class='row'>
+                <div class='col-xs-6'>
+                    <?php if (isset($form_action['select'])) : ?>
+                        <h1>Edit Post</h1>
+                    <?php else : ?>
+                        <h1>Post Form</h1>
+                    <?php endif; ?>
+
+
+                    <form class='well clearfix' method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                        <div class='form-group'>
+                            <label>Title</label><br>
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1"><i class='glyphicon glyphicon-file'></i></span>
+                                <input type="text" class="form-control" name='title' placeholder="Enter Title..." value='<?php
+                                if (isset($form_action['select'])) {
+                                    echo $title;
+                                }
+                                ?>'>
+                            </div>
+                        </div><!-- post_title -->
+
+                        <div class="form-group">
+                            <label>Content</label> <br>
+                            <textarea name='body' class="form-control" placeholder="Type Content..." rows="5"><?php
+                                if (isset($form_action['select'])) {
+                                    echo $body;
+                                }
+                                ?></textarea>
+                        </div><!-- post_body -->
+
+                        <input type='hidden' name='id' value=" <?php
+                        if (isset($form_action['select'])) {
+                            echo $id;
+                        }
+                        ?>">
+
+
+                        <?php if (isset($form_action['select'])) : ?>
+                            <button  type='submit' class='btn btn-sm btn-primary pull-right' name='edit'><i class='glyphicon glyphicon-edit'></i> Edit</button>
+                            <a href='index.php'  type='submit' class='btn btn-sm btn-warning pull-right' name='edit'><i class='glyphicon glyphicon-trash'></i> Cancel</a>
+                        <?php else : ?>
+                            <button  type='submit' class='btn btn-sm btn-success pull-right' name='create'><i class='glyphicon glyphicon-plus'></i> Add Post</button>
+                        <?php endif; ?>
+
+
+                        <p><?php echo $msg; ?></p>                        
+                    </form><!-- post form -->
+                </div><!-- .col -->
+            </div><!-- .row -->
+
+            <hr>
+
+            <?php if (!isset($form_action['select'])) : ?>
+                <h1>POST PAGE</h1>
+
+                <table class='table table-bordered table-striped table-responsive table-condensed table-hover'>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>TITLE</th>
+                            <th>BODY</th>
+                            <th>Update</th>
+                        </tr>
+                    </thead><!-- thead -->
+                    <tbody>
+                        <?php foreach ($posts as $post) : ?>
+                            <tr>
+                                <td><?php echo $post['post_id']; ?></td>
+                                <td><?php echo $post['post_title']; ?></td>
+                                <td><?php echo $post['post_body']; ?></td>
+                                <td>
+                                    <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                                        <input type="hidden" name='id' value="<?php echo $post['post_id']; ?>">
+                                        <button type='submit' class='btn btn-xs btn-danger pull-right' name='delete'><i class='glyphicon glyphicon-trash'></i></button>
+                                        <button type='submit' class='btn btn-xs btn-primary pull-right' name='select' value='Edit'><i class='glyphicon glyphicon-edit'></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody><!-- tbody -->
+                </table><!-- table -->
+
+            <?php endif; ?>
+        </div><!-- .container -->
+
+        <!-- ==============================================
+        Scripts Loaded on bottom page for faster page load
+        ================================================-->        
+        <!-- jquery -->
+        <script src="assets/js/jquery1.11.1.min.js" type="text/javascript"></script>
+        <!-- bootstrap -->
+        <script src="assets/js/bootstrap.js" type="text/javascript"></script>
+
+    </body><!-- body -->
+</html><!-- html -->
+

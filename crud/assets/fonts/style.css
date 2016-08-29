@@ -1,0 +1,291 @@
+/*======================================
+body containers
+======================================*/
+body{
+    color: #ffffff;
+    font-size: 19px;
+    line-height: 1.2;
+    font-family: georgia;    
+}
+
+/*======================================
+Navbar
+======================================*/
+#navbar{
+    margin-bottom: 0px;
+    border-radius: 0px;
+    background: #a52d4e;
+    border: none;
+    z-index: 1;
+    font-family: 'Lobster Two', Helvetica, sans-serif;
+}
+
+#navbar .navbar-brand{
+    height: auto;
+    font: 400 55px/1.3 'Lobster Two', Helvetica, sans-serif;
+    padding: 0px;
+}
+
+#navbar a{
+    color: #ffffff;
+    padding: 26px 50px;
+    font-size: 20px;
+}
+
+#navbar a:active, #navbar a:hover{
+    background: #b1405f;
+}
+
+@media (max-width: 992px) {
+    .navbar-header {
+        float: none;
+    }
+    .navbar-left,.navbar-right {
+        float: none !important;
+    }
+    .navbar-toggle {
+        display: block;
+    }
+    .navbar-collapse {
+        border-top: 1px solid transparent;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .navbar-fixed-top {
+        top: 0;
+        border-width: 0 0 1px;
+    }
+    .navbar-collapse.collapse {
+        display: none!important;
+    }
+    .navbar-nav {
+        float: none!important;
+        margin-top: 7.5px;
+    }
+    .navbar-nav>li {
+        float: none;
+    }
+    .navbar-nav>li>a {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .collapse.in{
+        display:block !important;
+    }
+}
+
+/*======================================
+HTML and Bootsrap Overide
+======================================*/
+img{
+    width: 100%;    
+}
+
+.thumbnail{
+    background: wheat; 
+}
+
+.list-group li{
+    background: transparent !important;
+    border-color: #b8e237;
+}
+
+/*======================================
+Typography
+======================================*/
+.page-header{
+    color: #b8e237;
+    font-family: 'Lobster Two', Helvetica, sans-serif;
+}
+
+.text-white{
+    color: white !important;
+}
+
+.text-black{
+    color: black !important;
+}
+
+/*======================================
+Custom Elements
+======================================*/
+.padding-none{
+    padding: 0;
+}
+
+.top-margin-none{
+    margin-top: 0;
+}
+
+.img_landscape{
+    height: 35vh !important;
+}
+
+.img_portrait{
+    height: 40vh !important;
+}
+
+.portrait{
+    width: 80%;
+}
+
+/*======================================
+Page Layout Top to bottom
+======================================*/
+section{
+    padding: 50px;
+    color: #ffffff;    
+    min-height: 50vh;
+    width: 100%;
+}
+
+article{
+    min-height: 35vh;
+}
+
+#about{    
+    width: 100%;
+    min-height: 100vh;
+    background-color: rgba(12, 12, 12, 0.62);
+    padding-top: 116px;
+}
+
+#gallery{
+    background: #ffffff;
+    min-height: 70vh;
+    color: black;
+    text-align: center;
+}
+
+#gallery a{
+    margin-bottom: 20px !important;
+}
+
+#reviews{
+    background: #ecb651;
+}
+
+#contact{
+    background: #542331;
+}
+
+#footer{    
+    font-size: 13px;
+    color: white;
+    background: rgb(80, 12, 35);
+    width: 100%;
+    padding: 20px 0px;
+}
+
+
+/*======================================
+Photo Swipe gallery
+======================================*/
+.my-gallery{
+    padding-top: 20px;
+}
+
+.my-gallery .thumbnail{
+    background: #333333;
+    padding: 2px;
+}
+
+.my-gallery img {
+    width: 100%;
+    height: 150px;
+    width: 150px;
+}
+.my-gallery figure {
+    display: block;
+    float: left;
+    margin: 0 5px 5px 0;
+    width: 150px;
+}
+
+.my-gallery figcaption {
+    display: none;
+}
+
+.pswp__caption__center {
+    text-align: center;
+    /* max-width: 420px; */
+    /* margin: 0 auto; */
+    font-size: 20px;
+    padding: 10px;
+    /* line-height: 20px; */
+    color: #CCC;
+}
+
+/*======================================
+Review Slider
+======================================*/
+#quote-carousel {
+    padding: 0 10px 30px 10px;
+    margin-top: 30px;
+    /* Control buttons  */
+    /* Previous button  */
+    /* Next button  */
+    /* Changes the position of the indicators */
+    /* Changes the color of the indicators */
+}
+#quote-carousel .carousel-control {
+    background: none;
+    color: #CACACA;
+    font-size: 2.3em;
+    text-shadow: none;
+    margin-top: 30px;
+}
+#quote-carousel .carousel-control.left {
+    left: -60px;
+}
+#quote-carousel .carousel-control.right {
+    right: -60px;
+}
+#quote-carousel .carousel-indicators {
+    right: 50%;
+    top: auto;
+    bottom: 0px;
+    margin-right: -19px;
+}
+#quote-carousel .carousel-indicators li {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    cursor: pointer;
+    border: 4px solid #CCC;
+    border-radius: 50px;
+    opacity: 0.4;
+    overflow: hidden;
+    transition: all 0.4s;
+}
+#quote-carousel .carousel-indicators .active {
+    background: #333333;
+    width: 128px;
+    height: 128px;
+    border-radius: 100px;
+    border-color: #f33;
+    opacity: 1;
+    overflow: hidden;
+}
+.carousel-inner {
+    min-height: 300px;
+}
+.item blockquote {
+    border-left: none;
+    margin: 0;
+}
+.item blockquote p:before {
+    content: "\f10d";
+    font-family: 'Fontawesome';
+    float: left;
+    margin-right: 10px;
+}
+
+
+/*======================================
+Google Map
+======================================*/
+#display-google-map .map-generator {
+    max-width: 100%; 
+    max-height: 100%; 
+    background: none;
+}

@@ -54,22 +54,29 @@ class Database {
                     break;
             }
         }
-        $this->stmt->bindValue($param, $value,$type);
+        $this->stmt->bindValue($param, $value, $type);
     }
-    
+
     //  Executes a query statement
-    public function execute(){
+    public function execute() {
         return $this->stmt->execute();
     }
-    
-    public function lastInsertId(){
-        $this->dbh->lastInsertId();
+
+    // Returns last interted ID
+    public function lastInsertId() {
+        return $this->dbh->lastInsertId();
     }
-    
+
     //  Return query result in assoc array
-    public function resultset(){
+    public function resultset() {
         $this->execute();
         return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
-    }    
+    }
+
+    public function __destruct() {
+        // Uninitialize query and database handler
+        $this->stmt = null;
+        $this->dbh = null;
+    }
 
 }
