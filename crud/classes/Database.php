@@ -6,7 +6,7 @@ class Database {
     private $host = 'localhost';
     private $user = 'root';
     private $pwd = 'Wc~045,j2';
-    private $dbname = 'ionic3';
+    private $dbname = 'oop_test';
     //  Database handler, error handler and sql statement Properties
     private $dbh;
     private $error;

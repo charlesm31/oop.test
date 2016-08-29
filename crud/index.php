@@ -11,7 +11,7 @@ $form_action = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
 // Add Post
 if (isset($form_action['create'])) {
-    $post->CreatePost($form_action);
+    $msg = $post->CreatePost($form_action);
 }
 
 // Select Single Post
@@ -25,14 +25,14 @@ if (isset($form_action['select'])) {
     }
 }
 
-// Delete Post
+// Edit Post
 if (isset($form_action['edit'])) {
-    $post->EditPost($form_action);
+    $msg = $post->EditPost($form_action);
 }
 
 // Delete Post
 if (isset($form_action['delete'])) {
-    $post->DeletePost($form_action['id']);
+    $msg = $post->DeletePost($form_action['id']);
 }
 
 $posts = $post->AllPosts();
@@ -108,7 +108,6 @@ $posts = $post->AllPosts();
                         <?php endif; ?>
 
 
-                        <p><?php echo $msg; ?></p>                        
                     </form><!-- post form -->
                 </div><!-- .col -->
             </div><!-- .row -->
@@ -144,6 +143,9 @@ $posts = $post->AllPosts();
                         <?php endforeach; ?>
                     </tbody><!-- tbody -->
                 </table><!-- table -->
+
+                <h4 class="text-success"><?php echo $msg; ?></h4>                        
+
 
             <?php endif; ?>
         </div><!-- .container -->

@@ -83,12 +83,7 @@ class Post {
         //  Excecute Query
         $this->database->execute();
 
-        //  Check if insert is successful
-        if ($this->database->lastInsertId()) {
-            return $msg = 'Post Edited.';
-        } else {
-            return $msg = 'Failed editing Post.';
-        }
+        return $msg = 'Post Edited.';
     }
 
     public function DeletePost($id) {
@@ -96,12 +91,7 @@ class Post {
         $this->database->bind(':id', $id);
         $this->database->execute();
 
-        //  Check if insert is successful
-        if ($this->database->lastInsertId()) {
-            return $msg = 'Post Deleted.';
-        } else {
-            return $msg = 'Failed deleting Post.';
-        }
+        return $msg = 'Post Deleted.';
     }
 
 }
